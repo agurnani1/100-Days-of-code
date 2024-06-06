@@ -68,3 +68,65 @@ Output:
 
 
 SOLUTION
+I came across this interesting SQL problem in Leetcode and thought I’d share it. 
+Here it goes: 
+Write a solution to select the product ID, year, quantity, and price for the first year of every product sold.
+Return the resulting table in any order.
+The result format is in the following example:
+Input: 
+Sales table:
+| sale_id | product_id | year | quantity | price |
+| 1       | 100        | 2008 | 10       | 5000  |
+| 2       | 100        | 2009 | 12       | 5000  |
+| 7       | 200        | 2011 | 15       | 9000  |
+Product table:
+| product_id | product_name |
+| 100        | Nokia        |
+| 200        | Apple        |
+| 300        | Samsung      |
+Output: 
+| product_id | first_year | quantity | price |
+| 100        | 2008       | 10       | 5000  |
+| 200        | 2011       | 15       | 9000  |
+
+At first, I went with this solution: 
+select product_id, min(year) as first_year, quantity, price 
+from Sales 
+group by product_id
+
+But, it didn’t work. Then, after hours of research and trials, I managed to figure it out. 
+First, let’s understand what I did wrong.
+According to our given problem, what we want is to group sales by product_id and after this get the price and quantity of each product_id for only the first year.
+So, why didn’t this query work? To understand this we must know that, after we group our sales by product_id, our database will have a pool of rows (by product_id) and can’t infer which row to choose from if we want some column other than the grouped one. 
+For eg: here, I’ve selected some rows with product_id = 61
+
+| sale_id | product_id | year | quantity | price |
+| 8 | 61 | 2064 | 66 | 7019 |
+| 1808 | 61 | 1815 | 14 | 9530 |
+| 1958 | 61 | 2061 | 25 | 9307 |
+Expected:
+| product_id | first_year | quantity | price |
+| 61 | 1815 | 14 | 9530 |
+But, no!
+Output:
+| 61 | 1815 | 66 | 7019 | 
+
+It seemed obvious that the query would return 14 and 9350 for quantity and price when we asked for min(year). No! That’s not how it works. when we ask for the minimum it will inspect each year for that product_id  from the pool and return it, but it will not select the entire row after returning the year. 
+Selecting the min(year) does not select the entire row. And hence, the error.
+There are a few ways to avert this problem, I solved it by creating a temporary table.
+Step 1: write a query to include the columns we want in our output
+select s1.product_id, s1.year, s1.quantity, s1.price 
+from Sales as s1
+Step 2: Then, write a query that gives you the first-year
+select product_id, min(year) as first_year
+from Sales 
+group by product_id
+Step 3: Join both these queries making a temporary table.
+select s1.product_id, s1.year as first_year, s1.quantity, s1.price 
+from Sales as s1
+Inner join (
+select product_id, min(year) as first_year
+from Sales 
+group by product_id
+) as s2
+On s2.product_id = s1.product_id and s1.year = s2.first_year
