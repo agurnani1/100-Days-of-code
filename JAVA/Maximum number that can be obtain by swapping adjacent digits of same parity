@@ -1,0 +1,113 @@
+Given an integer N, the task is to find the maximum integer that can be obtained from the given integer
+such that the adjacent digits of the same parity can be swapped any number of times. 
+Two digits of the same parity mean they will have the same remainder when divided by two.
+=====================
+Examples:
+
+Input: S = 468136
+Output: 864316
+Explanation: The operations are performed as:
+
+Initially: S = 468136
+First Operation: 6 and 8 are adjacent and their parity is also the same, Therefore, after swapping them, S = 486136
+Second Operation: 4 and 8 are adjacent and their parity is also the same. After swapping them, S = 846136
+Third Operation: 1 and 3 are adjacent and their parity is also same. After swapping them, S = 846316
+Fourth Operation: 4 and 6 are adjacent and their parity is also the same. After swapping them, S = 864316
+=========================
+Approach: To solve the problem follow the below idea
+
+The problem is based on the Two Pointer and Sorting. Find out each window of consecutive digits having same parity using Two Pointer Technique.
+Then reverse every window of digits into descending order using sorting and merge the digits of all windows.
+By this approach, we can solve the problem easily.
+====================================================
+Steps taken to solve the problem:
+
+Create an array let’s say Digits[] and store the digits of S in this array.
+Create an ArrayList of ArrayList<ArrayList<Integer>> data type let’s say List stores the window of same parity elements.
+Apply two-pointer technique to find the window of consecutive elements having same parity. Additionally, store those elements into an ArrayList let say Temp and sort Temp into Descending order using Collections.reverseOrder(). After that insert Temp into List.
+Output all the elements in serial manner stored in List.
+
+=============================
+import java.util.*;
+
+// Driver Class
+public class AG {
+
+    // Driver Function
+    public static void main(String[] args)
+    {
+        // Input String
+        String str = "468136";
+
+        // Function call
+        Max_number(str);
+    }
+
+    // Method to print maximum possible number
+    public static void Max_number(String str)
+    {
+
+        // N stores the length of String
+        int N = str.length();
+
+        // Array to store digits of String
+        int[] digits = new int[N];
+
+        // Loop for initializing digits of String into
+        // digits[]
+        for (int i = 0; i < N; i++) {
+            digits[i]
+                = (Integer.parseInt("" + str.charAt(i)));
+        }
+
+        // ArrayList to store consecutive windows of same
+        // parity
+        ArrayList<ArrayList<Integer>> list
+            = new ArrayList<>();
+
+        // Left End of the window
+        int left = 0;
+
+        // Two pointer algorithm to find window of same
+        // parity consecutive elements
+        while (left < N) {
+
+            // Right end of window
+            int right = left;
+
+            // temporary ArrayList to store the window
+            ArrayList<Integer> temp = new ArrayList<>();
+
+            // Incrementing right End to find the window of
+            // same parity elements
+            while (right < (N - 1)
+                   && (digits[right]) % 2
+                          == (digits[right + 1]) % 2) {
+
+                // Adding elements into temp ArrayList
+                temp.add(digits[right]);
+                right++;
+            }
+
+            // Adding the last element of the window
+            temp.add(digits[right]);
+
+            // Sorting temp into reverse order using inbuilt
+            // Collections class
+            Collections.sort(temp, Collections.reverseOrder());
+
+            // Adding temp into list
+            list.add(temp);
+
+            // left End of next window
+            left = right + 1;
+        }
+
+        // Printing the elements from the list
+        for (ArrayList<Integer> l : list) {
+            for (Integer x : l) {
+                System.out.print(x);
+            }
+        }
+    }
+}
