@@ -1,0 +1,36 @@
+-- SQL request(s)​​​​​​‌​‌‌​‌‌​​​‌​​​​‌‌‌​‌‌​‌‌​ below
+SELECT ORDERS.ORDERID, STRING_AGG(DISHES.NAME, ',' ORDER BY DISHES.NAME) as ITEMS
+FROM ORDERS INNER JOIN ORDERSDISHES ON ORDERS.ORDERID=ORDERSDISHES.ORDERID
+INNER JOIN DISHES ON ORDERSDISHES.DISHID=DISHES.DISHID
+GROUP BY ORDERS.ORDERID
+HAVING ORDERS.ORDERDATE>= '2022-05-01';
+
+
+
+
+
+Correct output
+43 rows (23 not displayed)
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+| ORDERID | ITEMS                                                                                                                                        |
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+| 958     | Chocolate Chip Brownie,Creme Brulee,Mini Cheeseburgers,Mini Cheeseburgers,Quinoa Salmon Salad                                                |
+| 959     | Artichokes with Garlic Aioli,Handcrafted Pizza                                                                                               |
+| 960     | Artichokes with Garlic Aioli,Artichokes with Garlic Aioli,Garden Buffet,Handcrafted Pizza,Mini Cheeseburgers                                 |
+| 961     | Apple Pie,Cheesecake,Mini Cheeseburgers,Parmesan Deviled Eggs                                                                                |
+| 962     | Mini Cheeseburgers,Mini Cheeseburgers                                                                                                        |
+| 963     | Artichokes with Garlic Aioli,House Salad                                                                                                     |
+| 964     | Cheesecake,Classic Burger,Classic Burger,Pomegranate Iced Tea,Pomegranate Iced Tea,Tropical Blue Smoothie                                    |
+| 965     | Barbecued Tofu Skewers,Creme Brulee,French Onion Soup,House Salad,Panko Stuffed Mushrooms                                                    |
+| 966     | Apple Pie,Barbecued Tofu Skewers,Fiesta Family Platter,French Onion Soup,Mini Cheeseburgers                                                  |
+| 967     | French Onion Soup,Parmesan Deviled Eggs                                                                                                      |
+| 968     | Barbecued Tofu Skewers,Chocolate Chip Brownie,Tomato Bruschetta Tortellini                                                                   |
+| 969     | Apple Pie,Apple Pie,Creme Brulee,Mixed Berry Tart,Panko Stuffed Mushrooms,Panko Stuffed Mushrooms                                            |
+| 970     | Apple Pie,Chef's Salad,Garden Buffet,House Salad,Mini Cheeseburgers,Panko Stuffed Mushrooms                                                  |
+| 971     | Fiesta Family Platter,French Onion Soup,Mini Cheeseburgers                                                                                   |
+| 972     | Chef's Salad,French Onion Soup,French Onion Soup,Pomegranate Iced Tea,Tropical Blue Smoothie                                                 |
+| 973     | Chocolate Chip Brownie,Handcrafted Pizza,Parmesan Deviled Eggs                                                                               |
+| 974     | Artichokes with Garlic Aioli,Chef's Salad,Creme Brulee,Tomato Bruschetta Tortellini,Tropical Blue Smoothie                                   |
+| 975     | Quinoa Salmon Salad,Quinoa Salmon Salad                                                                                                      |
+| 976     | House Salad,Tomato Bruschetta Tortellini                                                                                                     |
+| 977     | Apple Pie,Panko Stuffed Mushrooms,Quinoa Salmon Salad 
