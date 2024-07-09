@@ -1,0 +1,42 @@
+
+
+
+-- SQL request(s)​​​​​​‌​‌‌​‌‌​​​‌​​​​​‌‌‌‌​​‌‌‌ below
+SELECT Customers.CUSTOMERID ,Customers.FIRSTNAME , Customers.LASTNAME, SUM(Dishes.Price) as TotalSpend
+--select *
+FROM  Customers  inner join Orders on Customers.CUSTOMERID= Orders.CUSTOMERID
+ inner join OrdersDishes on  Orders.ORDERID= OrdersDishes.ORDERID
+inner join Dishes on OrdersDishes.DISHID= Dishes.DISHID
+group by  Customers.CustomerID
+having TotalSpend>450
+
+order by TotalSpend Desc;
+
+Correct output
+9 rows
+-----------------------------------------------------
+| CUSTOMERID | FIRSTNAME | LASTNAME    | TOTALSPEND |
+-----------------------------------------------------
+| 100        | Blythe    | Leggan      | 687.75     |
+| 27         | Yves      | Dell'Abbate | 624.72     |
+| 39         | Oralla    | Dayer       | 600.70     |
+| 76         | Dyanna    | Fulger      | 528.80     |
+| 35         | Luciano   | Winton      | 522.78     |
+| 1          | Maggi     | Domney      | 472.82     |
+| 2          | Javier    | Dawks       | 469.75     |
+| 64         | Norby     | Sleight     | 460.83     |
+| 91         | Iver      | Stevensen   | 458.74     |
+-----------------------------------------------------
+
+Answer
+12345678910
+-- SQL request(s) below
+SELECT Customers.CUSTOMERID ,Customers.FIRSTNAME , Customers.LASTNAME, SUM(Dishes.Price) as TotalSpend
+--select *
+FROM  Customers  inner join Orders on Customers.CUSTOMERID= Orders.CUSTOMERID
+ inner join OrdersDishes on  Orders.ORDERID= OrdersDishes.ORDERID
+inner join Dishes on OrdersDishes.DISHID= Dishes.DISHID
+group by  Customers.CustomerID
+having TotalSpend>450
+
+order by TotalSpend Desc;
